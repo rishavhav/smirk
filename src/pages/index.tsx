@@ -1,12 +1,13 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
+  const user = useUser();
   return (
     <>
       <Head>
@@ -16,8 +17,8 @@ export default function Home() {
       </Head>
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div>
-          <h1> Sign in </h1>
-          <SignInButton />
+          {!user.isSignedIn && <SignInButton />}
+          {user.isSignedIn && <SignOutButton />}
         </div>
       </main>
     </>
